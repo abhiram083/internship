@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factorial Calculator</title>
+</head>
+<body>
+    <h1>Factorial Calculator</h1>
+    <form id="factorial-form">
+        <label for="number">Enter a positive integer:</label>
+        <input type="text" id="number" name="number" required>
+        <label for="method">Choose a method:</label>
+        <select id="method" name="method">
+            <option value="iterative">Iterative</option>
+            <option value="recursive">Recursive</option>
+        </select>
+        <button type="submit">Calculate</button>
+    </form>
+    <p id="result"></p>
+    <script src="script.js"></script>
+</body>
+</html>
