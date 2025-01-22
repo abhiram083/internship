@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Invitation Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select, textarea, button {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Create Your Event Invitation</h1>
+        <form id="invitationForm">
+            <div>
+                <label for="eventTitle">Event Title</label>
+                <input type="text" id="eventTitle" name="eventTitle" placeholder="Enter event title" required>
+                <div id="eventTitleError" class="error"></div>
+            </div>
+            <div>
+                <label for="eventDate">Event Date</label>
+                <input type="date" id="eventDate" name="eventDate" required>
+                <div id="eventDateError" class="error"></div>
+            </div>
+            <div>
+                <label for="theme">Theme</label>
+                <select id="theme" name="theme">
+                    <option value="modern">Modern</option>
+                    <option value="classic">Classic</option>
+                    <option value="rustic">Rustic</option>
+                </select>
+            </div>
+            <div>
+                <label for="message">Custom Message</label>
+                <textarea id="message" name="message" rows="5" placeholder="Write a message for your invitation"></textarea>
+            </div>
+            <div>
+                <label for="email">RSVP Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter RSVP email" required>
+                <div id="emailError" class="error"></div>
+            </div>
+            <button type="button" id="generateBtn">Generate Invitation</button>
+        </form>
+        <div id="invitationPreview" style="display:none; margin-top: 20px;">
+            <h2>Invitation Preview</h2>
+            <div id="previewContent" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #eafaf1;"></div>
+            <button id="downloadBtn">Download Invitation</button>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('invitationForm');
+        const preview = document.getElementById('invitationPreview');
+        const previewContent = document.getElementById('previewContent');
+        const generateBtn = document.getElementById('generateBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        generateBtn.addEventListener('click', () => {
+            const title = document.getElementById('eventTitle').value.trim();
+            const date = document.getElementById('eventDate').value;
+            const theme = document.getElementById('theme').value;
+            const message = document.getElementById('message').value.trim();
+            const email = document.getElementById('email').value.trim();
+
+            let isValid = true;
+
+            document.getElementById('eventTitleError').textContent = '';
+            document.getElementById('eventDateError').textContent = '';
+            document.getElementById('emailError').textContent = '';
+
+            if (!title) {
+                document.getElementById('eventTitleError').textContent = 'Event title is required.';
+                isValid = false;
+            }
+
+            if (!date) {
+                document.getElementById('eventDateError').textContent = 'Event date is required.';
+                isValid = false;
+            }
+
+            if (!email || !email.includes('@')) {
+                document.getElementById('emailError').textContent = 'A valid email is required.';
+                isValid = false;
+            }
+
+            if (isValid) {
+                preview.style.display = 'block';
+                previewContent.innerHTML = `
+                    <h3>${title}</h3>
+                    <p><strong>Date:</strong> ${date}</p>
+                    <p><strong>Theme:</strong> ${theme}</p>
+                    <p><strong>Message:</strong> ${message}</p>
+                    <p><strong>RSVP Email:</strong> ${email}</p>
+                `;
+            }
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            const content = previewContent.innerHTML;
+            const blob = new Blob([content], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'invitation.html';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>
